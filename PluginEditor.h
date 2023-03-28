@@ -1,0 +1,24 @@
+#pragma once
+
+#include "PluginProcessor.h"
+#include "sami/sami_WebViewComponent.h"
+
+//==============================================================================
+class AudioPluginAudioProcessorEditor  : public juce::AudioProcessorEditor
+{
+public:
+    explicit AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor&);
+    ~AudioPluginAudioProcessorEditor() override;
+
+    //==============================================================================
+    void paint (juce::Graphics&) override;
+    void resized() override;
+
+private:
+    // This reference is provided as a quick way for your editor to
+    // access the processor object that created it.
+    AudioPluginAudioProcessor& processorRef;
+    sami::WebViewComponent m_web;
+    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)
+};
