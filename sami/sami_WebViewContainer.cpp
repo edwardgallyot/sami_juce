@@ -32,7 +32,7 @@ static unsigned long sami::WebViewContainer::getWindowID (chod::ui::WebView& v);
 sami::WebViewContainer::~WebViewContainer()
 {
    #if JUCE_MAC
-    setView ({});
+    m_nativeBase->setView ({});
    #elif JUCE_WINDOWS
     m_nativeBase->setHWND ({});
    #elif JUCE_LINUX
