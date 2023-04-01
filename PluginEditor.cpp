@@ -8,8 +8,21 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     juce::ignoreUnused (processorRef);
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize (400, 300);
+    setResizable(true, true);
+    setSize(100, 100);
     addAndMakeVisible(m_web);
+
+    const char* html =
+        "<!DOCTYPE html>"
+        "<html>"
+            "<head>"
+                "<title>Example</title>"
+            "</head>"
+            "<body>"
+                "<p>This is an example of a simple HTML page with one paragraph.</p>"
+            "</body>"
+        "</html>";
+    m_web.SetHTML(html);
 }
 
 AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()

@@ -16,7 +16,6 @@ sami::WebViewContainer::WebViewContainer()
     m_webview = std::make_unique<choc::ui::WebView>();
     m_nativeBase->setHWND (m_webview->getViewHandle());
     #endif
-
 }
 #if JUCE_LINUX
 static unsigned long sami::WebViewContainer::getWindowID (chod::ui::WebView& v);
@@ -40,8 +39,29 @@ sami::WebViewContainer::~WebViewContainer()
    #endif
 }
 
-juce::Component* sami::WebViewContainer::GetComponent()
+void sami::WebViewContainer::ResizeToComponent(juce::Component* component)
 {
-    return m_nativeBase.get();
+    m_nativeBase->setBounds(component->getBounds());
+   #if JUCE_MAC
+    m_nativeBase->resizeViewToFit ();
+   #elif JUCE_WINDOWS
+    m_nativeBase->updateHWNDBounds();
+   #elif JUCE_LINUX
+    // Fuck knows what we're doing here...
+   #endif
 }
 
+void sami::WebViewContainer::AddWebViewToComponent(juce::Component* component)
+{
+    component->addAndMakeVisible(*m_nativeBase);
+}
+
+void sami::WebViewContainer::SetHTML(const std::string& html)
+{
+    m_webview->setHTML(html);
+}
+
+void sami::WebViewContainer::SetURL(const std::string& url)
+{
+    m_webview->navigate(url);
+}

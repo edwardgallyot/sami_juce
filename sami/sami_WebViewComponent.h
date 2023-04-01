@@ -11,6 +11,9 @@ namespace sami
         WebViewComponent();
         void resized() override;
 
+        void SetHTML(const std::string& html);
+        void SetURL(const std::string& url);
+
     private:
         std::unique_ptr<WebViewContainer> m_webview;
     };

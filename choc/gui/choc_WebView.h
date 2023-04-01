@@ -1245,6 +1245,7 @@ inline void WebView::unbind (const std::string& functionName)
 
 inline void WebView::invokeBinding (const std::string& msg)
 {
+    DBG(msg);
     try
     {
         auto json = choc::json::parse (msg);
