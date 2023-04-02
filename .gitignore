@@ -1,4 +1,4 @@
 build/**
 build/
-sami/sami_gui/node_modules
 cmake-build-debug-visual-studio
+/CMakeSettings.json

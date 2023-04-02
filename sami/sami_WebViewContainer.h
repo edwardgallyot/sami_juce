@@ -3,7 +3,12 @@
 #include <JuceHeader.h>
 #include "../choc/gui/choc_WebView.h"
 
-
+// Macros defined in the same way as a generated CMajor project
+// for more info see https://cmajor.dev
+// Much like a generated CMajor project we use a choc::WebView object
+// to generate the javascript ui.
+// Unlike the webview and cmajor though, sami's custom fork will use protobuf
+// to serialise the data.
 #if JUCE_MAC
  using NativeUIBase = juce::NSViewComponent;
 #elif JUCE_WINDOWS
@@ -22,11 +27,13 @@ public:
     WebViewContainer();
     ~WebViewContainer();
 
+    // Resizes the webview in this container to the component supplied.
     void ResizeToComponent(juce::Component* component);
+    // Adds the webview in this container to the component supplied.
     void AddWebViewToComponent(juce::Component* component);
-    // Sets the webview Html
+    // Sets the webview in this containers HTML
     void SetHTML(const std::string& );
-    // Sets the webview URL
+    // Sets the webview in this containers URL
     void SetURL(const std::string& );
 
 private:
