@@ -1,0 +1,9 @@
+[submodule "protobuf"]
+	path = protobuf
+	url = https://github.com/protocolbuffers/protobuf.git
+[submodule "choc"]
+	path = choc
+	url = https://github.com/edwardgallyot/choc.git
+[submodule "JUCE"]
+	path = JUCE
+	url = https://github.com/juce-framework/JUCE
