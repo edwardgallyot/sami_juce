@@ -12,17 +12,18 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     setSize(100, 100);
     addAndMakeVisible(m_web);
 
-    const char* html =
-        "<!DOCTYPE html>"
-        "<html>"
-            "<head>"
-                "<title>Example</title>"
-            "</head>"
-            "<body>"
-                "<p>This is an example of a simple HTML page with one paragraph.</p>"
-            "</body>"
-        "</html>";
-    m_web.SetHTML(html);
+//    const char* html =
+//        "<!DOCTYPE html>"
+//        "<html>"
+//            "<head>"
+//                "<title>Example</title>"
+//            "</head>"
+//            "<body>"
+//                "<p>This is an example of a simple HTML page with one paragraph.</p>"
+//            "</body>"
+//        "</html>";
+//    m_web.SetHTML(html);
+    m_web.SetURL("http://localhost:5173");
 }
 
 AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
