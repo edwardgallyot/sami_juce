@@ -2,3 +2,6 @@ build/**
 build/
 cmake-build-debug-visual-studio
 /CMakeSettings.json
+.idea
+.vscode
+.vs
