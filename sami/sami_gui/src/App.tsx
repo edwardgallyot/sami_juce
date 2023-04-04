@@ -16,7 +16,7 @@ function App() {
                 max={100}
                 value={value}
                 className={"slider"}
-                onChange={(event)=> {setValue(event.target.value as number)}}
+                onChange={(event)=> {setValue(event.target.value as any)}}
             />
         </div>
     </div>
