@@ -10,9 +10,13 @@
 
 cmake_minimum_required(VERSION 3.15)
 
+
 set(protobuf_BUILD_SHARED_LIBS 1)
+set(protobuf_BUILD_TESTS OFF)
 
 project(AUDIO_PLUGIN_EXAMPLE VERSION 0.0.1)
+
+set(CMAKE_CXX_STANDARD 23)
 
 # If you've installed JUCE somehow (via a package manager, or directly using the CMake install
 # target), you'll need to tell this project that it depends on the installed copy of JUCE. If you've
