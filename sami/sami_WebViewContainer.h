@@ -3,7 +3,6 @@
 #include <JuceHeader.h>
 #include "../choc/gui/choc_WebView.h"
 
-// Macros defined in the same way as a generated CMajor project
 // for more info see https://cmajor.dev
 // Much like a generated CMajor project we use a choc::WebView object
 // to generate the javascript ui.

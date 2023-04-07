@@ -14,6 +14,8 @@ cmake_minimum_required(VERSION 3.15)
 set(protobuf_BUILD_SHARED_LIBS 1)
 set(protobuf_BUILD_TESTS OFF)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 project(AUDIO_PLUGIN_EXAMPLE VERSION 0.0.1)
 
 set(CMAKE_CXX_STANDARD 23)
@@ -76,7 +78,6 @@ target_sources(sami
         sami/PluginProcessor.cpp
         sami/sami_WebViewContainer.cpp
         sami/sami_WebViewComponent.cpp
-        sami/addressbook.pb.cc
         )
 
 

@@ -2,7 +2,6 @@
 
 #include <JuceHeader.h>
 #include "sami_WebViewContainer.h"
-#include "addressbook.pb.h"
 
 namespace sami
 {
