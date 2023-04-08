@@ -2,7 +2,7 @@
 
 sami::WebViewComponent::WebViewComponent(bool enableDevTools)
 {
-    m_webview = std::make_unique<sami::WebViewContainer>();
+    m_webview = std::make_unique<sami::WebViewContainer>(enableDevTools);
     m_webview->AddWebViewToComponent(this);
 }
 

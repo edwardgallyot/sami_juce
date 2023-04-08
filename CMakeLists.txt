@@ -1,18 +1,10 @@
-# Example Audio Plugin CMakeLists.txt
-
-# To get started on a new plugin, copy this entire folder (containing this file and C++ sources) to
-# a convenient location, and then start making modifications.
-
-# The first line of any CMake project should be a call to `cmake_minimum_required`, which checks
-# that the installed CMake will be able to understand the following CMakeLists, and ensures that
-# CMake's behaviour is compatible with the named version. This is a standard CMake command, so more
-# information can be found in the CMake docs.
+# sami CMakeLists.txt
 
 cmake_minimum_required(VERSION 3.15)
 
 # Set a few proto things
-set(protobuf_BUILD_SHARED_LIBS 1)
-set(protobuf_BUILD_TESTS OFF)
+#set(protobuf_BUILD_SHARED_LIBS 1)
+#set(protobuf_BUILD_TESTS OFF)
 
 # This is for neovim :)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -24,7 +16,10 @@ set(CMAKE_CXX_STANDARD 23)
 
 # We add our submodules here. We don't need to add choc as it's header only :)
 add_subdirectory(JUCE)                    
-add_subdirectory(protobuf)
+
+# We can use find package to use the system installed protobuf
+find_package(Protobuf REQUIRED)
+include_directories(${Protobuf_INCLUDE_DIRS})
 
 # We may target pro tools here...but no point for now
 # juce_set_aax_sdk_path(...)
@@ -83,9 +78,5 @@ target_link_libraries(sami
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
         juce::juce_recommended_warning_flags
-        # Target protobuf libraries
-        libprotobuf
-        libprotobuf-lite
-        libprotoc
 )
 
