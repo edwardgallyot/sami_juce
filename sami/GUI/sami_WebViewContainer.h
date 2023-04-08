@@ -1,7 +1,8 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "../choc/gui/choc_WebView.h"
+#include "sami_WebView.h"
+
 
 // for more info see https://cmajor.dev
 // Much like a generated CMajor project we use a choc::WebView object
@@ -23,7 +24,7 @@ namespace sami
 class WebViewContainer 
 {
 public:
-    WebViewContainer();
+    WebViewContainer(bool enableDevTools);
     ~WebViewContainer();
 
     // Resizes the webview in this container to the component supplied.
@@ -39,7 +40,7 @@ private:
     #if JUCE_LINUX
     static unsigned long getWindowID (PatchWebView& v);
     #endif
-    std::unique_ptr<choc::ui::WebView> m_webview;
+    std::unique_ptr<sami::WebView> m_webview;
     std::unique_ptr<NativeUIBase> m_nativeBase;
 };
 }

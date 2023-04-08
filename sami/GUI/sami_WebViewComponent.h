@@ -8,7 +8,7 @@ namespace sami
     class WebViewComponent : public juce::Component
     {
     public:
-        WebViewComponent();
+        WebViewComponent(bool enableDevTools);
         void resized() override;
 
         void SetHTML(const std::string& html);

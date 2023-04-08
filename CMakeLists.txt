@@ -76,8 +76,9 @@ target_sources(sami
     PRIVATE
         sami/PluginEditor.cpp
         sami/PluginProcessor.cpp
-        sami/sami_WebViewContainer.cpp
-        sami/sami_WebViewComponent.cpp
+        sami/GUI/sami_WebViewContainer.cpp
+        sami/GUI/sami_WebViewComponent.cpp
+        sami/GUI/sami_WebView.cpp
         )
 
 

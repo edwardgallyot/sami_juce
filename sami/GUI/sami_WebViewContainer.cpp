@@ -1,19 +1,20 @@
 #include "sami_WebViewContainer.h"
+#include <optional>
 
-sami::WebViewContainer::WebViewContainer()
+sami::WebViewContainer::WebViewContainer(bool enableDevTools)
 {
     #if JUCE_LINUX
-    m_webview = std::make_unique<choc::ui::WebView>();
+    m_webview = std::make_unique<sami::WebView>();
     m_nativeBase = std::make_unique<NativeUIBase>(getWindowID (*webview), true, false);
     #elif JUCE_MAC
     m_nativeBase = std::make_unique<NativeUIBase>();
     m_nativeBase->setSize(200, 200);
-    m_webview = std::make_unique<choc::ui::WebView>();
+    m_webview = std::make_unique<sami::WebView>();
     m_nativeBase->setView (m_webview->getViewHandle());
     #elif JUCE_WINDOWS
     m_nativeBase = std::make_unique<NativeUIBase>();
     m_nativeBase->setSize(200, 200);
-    m_webview = std::make_unique<choc::ui::WebView>();
+    m_webview = std::make_unique<sami::WebView>();
     m_nativeBase->setHWND (m_webview->getViewHandle());
     #endif
 }
