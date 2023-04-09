@@ -1,7 +1,0 @@
-syntax = "proto2";
-
-package sami;
-
-message Test {
-    optional string message = 1;
-}

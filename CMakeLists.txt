@@ -1,10 +1,10 @@
 # sami CMakeLists.txt
 
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.9)
 
 # Set a few proto things
-#set(protobuf_BUILD_SHARED_LIBS 1)
-#set(protobuf_BUILD_TESTS OFF)
+set(Protobuf_USE_STATIC_LIBS ON)
+set(protobuf_BUILD_TESTS OFF)
 
 # This is for neovim :)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -16,10 +16,7 @@ set(CMAKE_CXX_STANDARD 23)
 
 # We add our submodules here. We don't need to add choc as it's header only :)
 add_subdirectory(JUCE)                    
-
-# We can use find package to use the system installed protobuf
-find_package(Protobuf REQUIRED)
-include_directories(${Protobuf_INCLUDE_DIRS})
+link_directories(protobuf)
 
 # We may target pro tools here...but no point for now
 # juce_set_aax_sdk_path(...)
@@ -79,6 +76,8 @@ target_link_libraries(sami
         juce::juce_recommended_lto_flags
         juce::juce_recommended_warning_flags
 
-        ${Protobuf_LIBRARIES}
+        libprotoc
+        libprotobuf
+        libprotobuf-lite
 )
 
