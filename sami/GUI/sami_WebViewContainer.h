@@ -40,7 +40,7 @@ private:
     #if JUCE_LINUX
     static unsigned long getWindowID (PatchWebView& v);
     #endif
-    std::unique_ptr<sami::WebView> m_webview;
-    std::unique_ptr<NativeUIBase> m_nativeBase;
+    std::unique_ptr<sami::WebView> webview;
+    std::unique_ptr<NativeUIBase> nativeBase;
 };
 }

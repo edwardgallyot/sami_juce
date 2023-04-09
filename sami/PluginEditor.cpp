@@ -8,10 +8,8 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     m_web(true)
 {
     juce::ignoreUnused (processorRef);
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
     setResizable(true, true);
-    setSize(100, 100);
+    setSize(400, 400);
     addAndMakeVisible(m_web);
     m_web.SetURL("http://localhost:5173");
 }

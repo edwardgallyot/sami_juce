@@ -15,6 +15,6 @@ namespace sami
         void SetURL(const std::string& url);
 
     private:
-        std::unique_ptr<WebViewContainer> m_webview;
+        std::unique_ptr<WebViewContainer> webview;
     };
 }

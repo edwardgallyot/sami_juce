@@ -4,18 +4,18 @@
 sami::WebViewContainer::WebViewContainer(bool enableDevTools)
 {
     #if JUCE_LINUX
-    m_webview = std::make_unique<sami::WebView>(enableDevTools);
-    m_nativeBase = std::make_unique<NativeUIBase>(getWindowID (*webview), true, false);
+    this->webview = std::make_unique<sami::WebView>(enableDevTools);
+    this->nativeBase = std::make_unique<NativeUIBase>(getWindowID (*webview), true, false);
     #elif JUCE_MAC
-    m_nativeBase = std::make_unique<NativeUIBase>();
-    m_nativeBase->setSize(200, 200);
-    m_webview = std::make_unique<sami::WebView>(enableDevTools);
-    m_nativeBase->setView (m_webview->getViewHandle());
+    this->nativeBase = std::make_unique<NativeUIBase>();
+    this->nativeBase->setSize(200, 200);
+    this->webview = std::make_unique<sami::WebView>(enableDevTools);
+    this->nativeBase->setView (this->webview->getViewHandle());
     #elif JUCE_WINDOWS
-    m_nativeBase = std::make_unique<NativeUIBase>();
-    m_nativeBase->setSize(200, 200);
-    m_webview = std::make_unique<sami::WebView>(enableDevTools);
-    m_nativeBase->setHWND (m_webview->getViewHandle());
+    this->nativeBase = std::make_unique<NativeUIBase>();
+    this->nativeBase->setSize(200, 200);
+    this->webview = std::make_unique<sami::WebView>(enableDevTools);
+    this->nativeBase->setHWND (this->webview->getViewHandle());
     #endif
 }
 #if JUCE_LINUX
@@ -32,9 +32,9 @@ static unsigned long sami::WebViewContainer::getWindowID (chod::ui::WebView& v);
 sami::WebViewContainer::~WebViewContainer()
 {
    #if JUCE_MAC
-    m_nativeBase->setView ({});
+    this->nativeBase->setView ({});
    #elif JUCE_WINDOWS
-    m_nativeBase->setHWND ({});
+    this->nativeBase->setHWND ({});
    #elif JUCE_LINUX
     removeClient();
    #endif
@@ -42,11 +42,11 @@ sami::WebViewContainer::~WebViewContainer()
 
 void sami::WebViewContainer::ResizeToComponent(juce::Component* component)
 {
-    m_nativeBase->setBounds(component->getBounds());
+    this->nativeBase->setBounds(component->getBounds());
    #if JUCE_MAC
-    m_nativeBase->resizeViewToFit ();
+    this->nativeBase->resizeViewToFit ();
    #elif JUCE_WINDOWS
-    m_nativeBase->updateHWNDBounds();
+    this->nativeBase->updateHWNDBounds();
    #elif JUCE_LINUX
     // Fuck knows what we're doing here...
    #endif
@@ -54,15 +54,15 @@ void sami::WebViewContainer::ResizeToComponent(juce::Component* component)
 
 void sami::WebViewContainer::AddWebViewToComponent(juce::Component* component)
 {
-    component->addAndMakeVisible(*m_nativeBase);
+    component->addAndMakeVisible(*this->nativeBase);
 }
 
 void sami::WebViewContainer::SetHTML(const std::string& html)
 {
-    m_webview->setHTML(html);
+    this->webview->setHTML(html);
 }
 
 void sami::WebViewContainer::SetURL(const std::string& url)
 {
-    m_webview->navigate(url);
+    this->webview->navigate(url);
 }
