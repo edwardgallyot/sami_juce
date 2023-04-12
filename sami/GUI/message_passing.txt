@@ -1,0 +1,22 @@
+# We avoid using protobuf because it's a nightmare to link in C++ with plug-ins.
+# Instead we use a protocol designined in rust to pass up the correct information once it's serialised
+
+            --------       -------- WebviewUpdateAdapter                                            
+                                    * Has an ID                                          
+            WEBVIEW  ---->  PLUGIN  * Has an OnUpdate function                                   
+                     <----                                                                        
+            --------       --------                                                                     
+                              |
+                              |                                                                  
+                 DE/SERIALIZE |                                                                  
+                     JSON     |
+                              |
+                           ------ Accepts any JSON data 
+                            RUST  * Returns a MessageType from the enum
+                           ------
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    

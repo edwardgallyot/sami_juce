@@ -1,0 +1,17 @@
+[package]
+name = "sami_message_parser"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "sami_message_parser"
+crate-type = ["staticlib"]
+
+[dependencies]
+serde = {version ="1.0.159" ,features = ["derive"]} 
+serde_json = "1.0.95"
+ts-rs = "6.2.1"
+cxx = "1.0"
+
+[build-dependencies]
+cxx-build = "1.0"

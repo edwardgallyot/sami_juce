@@ -2,9 +2,25 @@
 
 cmake_minimum_required(VERSION 3.9)
 
-# Set a few proto things
-set(Protobuf_USE_STATIC_LIBS ON)
-set(protobuf_BUILD_TESTS OFF)
+# Building our rust messaging library
+set (SAMI_MESSAGE_CARGO_MANIFEST ${CMAKE_SOURCE_DIR}/sami/GUI/sami_message_parser/Cargo.toml)
+set(SAMI_MESSAGE_CARGO_TARGET_DIRECTORY ${CMAKE_SOURCE_DIR}/sami/GUI/sami_message_parser/target)
+set(SAMI_MESSAGE_SOURCE_FILE ${CMAKE_SOURCE_DIR}/sami/GUI/sami_message_parser/src/lib.rs)
+
+# Store the generated CPP files as variables for linkage
+set(SAMI_MESSAGE_BRIDGE_CPP ${SAMI_MESSAGE_CARGO_TARGET_DIRECTORY}/cxxbridge/sami_message_parser/src/lib.rs.cc)
+set(SAMI_MESSAGE_INCLUDE_DIR ${SAMI_MESSAGE_BRIDGE_CPP}/..)
+set(SAMI_MESSAGE_LIB ${SAMI_MESSAGE_CARGO_TARGET_DIRECTORY}/debug/${CMAKE_STATIC_LIBRARY_PREFIX}sami_message_parser${CMAKE_STATIC_LIBRARY_SUFFIX})
+
+
+# add_custom_command(
+#     OUTPUT ${SAMI_MESSAGE_BRIDGE_CPP} ${SAMI_MESSAGE_LIB}
+#     COMMAND cargo build --manifest-path ${SAMI_MESSAGE_CARGO_MANIFEST}
+#     DEPENDS ${SAMI_MESSAGE_SOURCE_FILE}
+#     USES_TERMINAL
+#     COMMENT "Building message parser lib..."
+# )
+
 
 # This is for neovim :)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -16,7 +32,7 @@ set(CMAKE_CXX_STANDARD 23)
 
 # We add our submodules here. We don't need to add choc as it's header only :)
 add_subdirectory(JUCE)                    
-link_directories(protobuf)
+link_directories(./sami/GUI/sami_message_parser/target/debug/)
 
 # We may target pro tools here...but no point for now
 # juce_set_aax_sdk_path(...)
@@ -39,7 +55,13 @@ juce_add_plugin(sami
     PRODUCT_NAME "sami")        # The name of the final executable, which can differ from the target name
 
 # Generate the JUCE header
-juce_generate_juce_header(sami)
+juce_generate_juce_header(sami) 
+
+target_include_directories(
+    sami
+    PRIVATE
+    ${SAMI_MESSAGE_INCLUDE_DIR}    
+)
 
 target_sources(sami
     PRIVATE
@@ -49,9 +71,9 @@ target_sources(sami
         sami/GUI/sami_WebViewContainer.cpp
         sami/GUI/sami_WebViewComponent.cpp
         sami/GUI/sami_WebView.cpp
-        # Proto buf messages
-        sami/proto/messages.pb.cc
-        )
+
+        ${SAMI_MESSAGE_BRIDGE_CPP}
+)
 
 
 target_compile_definitions(sami
@@ -59,7 +81,8 @@ target_compile_definitions(sami
         # JUCE_WEB_BROWSER and JUCE_USE_CURL would be on by default, but you might not need them.
         JUCE_WEB_BROWSER=0  # If you remove this, add `NEEDS_WEB_BROWSER TRUE` to the `juce_add_plugin` call
         JUCE_USE_CURL=0     # If you remove this, add `NEEDS_CURL TRUE` to the `juce_add_plugin` call
-        JUCE_VST3_CAN_REPLACE_VST2=0)
+        JUCE_VST3_CAN_REPLACE_VST2=0
+        DONT_SET_USING_JUCE_NAMESPACE=1)
 
 # We will end up adding our inlined assets as binary data from the html into juce
 # juce_add_binary_data(AudioPluginData SOURCES ...)
@@ -76,8 +99,8 @@ target_link_libraries(sami
         juce::juce_recommended_lto_flags
         juce::juce_recommended_warning_flags
 
-        libprotoc
-        libprotobuf
-        libprotobuf-lite
+        sami_message_parser
+        
 )
+
 
