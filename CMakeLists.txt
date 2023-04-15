@@ -12,15 +12,16 @@ set(SAMI_MESSAGE_BRIDGE_CPP ${SAMI_MESSAGE_CARGO_TARGET_DIRECTORY}/cxxbridge/sam
 set(SAMI_MESSAGE_INCLUDE_DIR ${SAMI_MESSAGE_BRIDGE_CPP}/..)
 set(SAMI_MESSAGE_LIB ${SAMI_MESSAGE_CARGO_TARGET_DIRECTORY}/debug/${CMAKE_STATIC_LIBRARY_PREFIX}sami_message_parser${CMAKE_STATIC_LIBRARY_SUFFIX})
 
+include(FetchContent)
 
-# add_custom_command(
-#     OUTPUT ${SAMI_MESSAGE_BRIDGE_CPP} ${SAMI_MESSAGE_LIB}
-#     COMMAND cargo build --manifest-path ${SAMI_MESSAGE_CARGO_MANIFEST}
-#     DEPENDS ${SAMI_MESSAGE_SOURCE_FILE}
-#     USES_TERMINAL
-#     COMMENT "Building message parser lib..."
-# )
+FetchContent_Declare(
+    Corrosion
+    GIT_REPOSITORY https://github.com/corrosion-rs/corrosion.git
+    GIT_TAG v0.3 # Optionally specify a commit hash, version tag or branch here
+)
 
+FetchContent_MakeAvailable(Corrosion)
+corrosion_import_crate(MANIFEST_PATH ${SAMI_MESSAGE_CARGO_MANIFEST})
 
 # This is for neovim :)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -56,12 +57,6 @@ juce_add_plugin(sami
 
 # Generate the JUCE header
 juce_generate_juce_header(sami) 
-
-target_include_directories(
-    sami
-    PRIVATE
-    ${SAMI_MESSAGE_INCLUDE_DIR}    
-)
 
 target_sources(sami
     PRIVATE
@@ -100,7 +95,4 @@ target_link_libraries(sami
         juce::juce_recommended_warning_flags
 
         sami_message_parser
-        
 )
-
-

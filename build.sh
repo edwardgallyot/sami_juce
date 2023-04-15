@@ -1,7 +1,6 @@
-WORKING_DIR = $(pwd)
-cd ./sami/GUI/sami_message_parser/ 
+WORKING_DIR=$(pwd)
 cargo build
 cargo test
-cd ../../../
+cd "$WORKING_DIR" || exit 1
 cmake -B build
 cmake --build build

@@ -1,23 +1,25 @@
 use cxx;
 
-// Import message types
-mod message_types;
-mod message;
+// Import module structure
+mod messages;
 
-use message_types::{
-    MessageType,
+use messages::message_types::{
     get_message_cxx_type,
-    set_message_cxx_type,
 };
 
 // Use our message module
-use message::{
+use messages::{
     Message,
     get_message_id,
     create_message_from_json,
     create_message,
     destroy_message,
     create_json_from_message
+};
+
+use messages::updates::{
+    get_float_update,
+    set_float_update,
 };
 
 
@@ -39,11 +41,18 @@ mod sami {
     // of our rust enum to the Cxx ones for the FFI, however, there's no guarantee
     // that we can't mess this up since all C++ is "unsafe"
     #[repr(i32)]
-    enum CxxMessage {
+    #[namespace="sami::messages::message_types"]
+    #[cxx_name="cxx_message"]
+    pub(crate) enum CxxMessage {
+        #[cxx_name="float_update"]
         FloatUpdate,
+        #[cxx_name="int_update"]
         IntUpdate,
+        #[cxx_name="bool_update"]
         BoolUpdate,
+        #[cxx_name="gesture_update"]
         GestureUpdate,
+        #[cxx_name="invalid"]
         Invalid
     }
     // All the functions that C++ need to work with message objects.
@@ -51,33 +60,29 @@ mod sami {
         // Define all the functions for a standard message in C++
         type Message;
         // Serialises a message from incoming JSON data.
-        #[namespace="message"]
-        #[cxx_name="CreateMessageFromJSON"]
-        fn create_message_from_json(string: &CxxString) -> *mut Message;
+        #[namespace="sami::messages"]
+        #[cxx_name="create"]
+        fn create_message_from_json(json: &CxxString) -> *mut Message;
         // Gets the unique id for the message.
-        #[namespace="message"]
-        #[cxx_name="GetMessageId"]
+        #[namespace="sami::messages"]
+        #[cxx_name="get_id"]
         fn get_message_id(message: &Message) -> Result<String>;
         // Creates an Invalid message type
-        #[namespace="message"]
-        #[cxx_name="CreateMessage"]
+        #[namespace="sami::messages"]
+        #[cxx_name="create"]
         fn create_message() -> *mut Message;
         // Serialises a message to be sent back as JSON data
-        #[namespace="message"]
-        #[cxx_name="CreateJSONFromMessage"]
+        #[namespace="sami::messages"]
+        #[cxx_name="to_json"]
         fn create_json_from_message(message: &Message) -> Result<String>;
         // Destroys a rust allocated message
-        #[namespace="message"]
-        #[cxx_name="DestroyMessage"]
+        #[namespace="sami::messages"]
+        #[cxx_name="destroy"]
         unsafe fn destroy_message(message: *mut Message);
         // Gets the message type from a 
-        #[namespace="message"]
-        #[cxx_name="GetMessageType"]
+        #[namespace="sami::messages::message_types"]
+        #[cxx_name="get"]
         fn get_message_cxx_type(message: &Message) -> CxxMessage;
-        // Sets the type of message from C++
-        #[namespace="message"]
-        #[cxx_name="SetMessageType"]
-        fn set_message_cxx_type(message: &mut Message, message_type: CxxMessage);
     }
 
     // TODO
@@ -88,11 +93,21 @@ mod sami {
     enum CxxID {
 
     }
+    extern "Rust" {
+
+    }
 
     // TODO
     // UPDATES
     // Any update that is larger than needed we will have to allocate the memory for it before
     // we try and serialise it.
+    extern "Rust" {
+        #[namespace="sami::messages::updates"]
+        fn set_float_update(message: &mut Message, value: f32);
+        #[namespace="sami::messages::updates"]
+        fn get_float_update(message: &Message, value: &mut f32) -> bool;
+    }
 }
+
 
 

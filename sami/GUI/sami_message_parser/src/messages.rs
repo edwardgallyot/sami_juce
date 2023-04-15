@@ -1,19 +1,26 @@
-use serde::{Serialize, Deserialize};
-use ts_rs::TS;
-use serde_json;
+// Modules
+pub mod updates;
+pub mod message_types;
+pub mod ids;
+
 use cxx::CxxString;
-use crate::MessageType;
+use serde::{Deserialize, Serialize};
+use serde_json;
+use ts_rs::TS;
+use message_types::MessageType;
+
+
 
 // A Unified Message Struct for use in Type script and C++
 #[derive(Serialize, Deserialize, Debug, Clone, TS)]
 #[ts(export)]
 pub struct Message {
     pub id: Option<String>,
-    pub message: MessageType
+    pub message: MessageType,
 }
 
 pub fn get_message_id(message: &Message) -> Result<String, String> {
-    if let Some(id) =  message.id.clone() {
+    if let Some(id) = message.id.clone() {
         Ok(id)
     } else {
         Err(String::from("Failed To Parse ID"))
@@ -27,9 +34,11 @@ pub fn create_message_from_json(string: &CxxString) -> *mut Message {
 }
 
 pub fn create_message() -> *mut Message {
-    Box::into_raw(Box::new(Message { id: None, message: MessageType::Invalid}))
+    Box::into_raw(Box::new(Message {
+        id: None,
+        message: MessageType::Invalid,
+    }))
 }
-
 
 pub unsafe fn destroy_message(message: *mut Message) {
     let __box = Box::from_raw(message);

@@ -9,10 +9,13 @@ use crate::{
 #[derive(Serialize, Deserialize, Debug, Copy, Clone, TS)]
 #[ts(export)]
 pub enum MessageType {
+    // Inits
+    // Updates
     FloatUpdate(f32),
     IntUpdate(i32),
     BoolUpdate(bool),
     GestureUpdate(bool),
+    // Custom Types
     Invalid
 }
 
@@ -26,18 +29,5 @@ pub fn get_message_cxx_type(message: &Message) -> CxxMessage {
         MessageType::BoolUpdate(..) => CxxMessage::BoolUpdate,
         MessageType::GestureUpdate(..) => CxxMessage::GestureUpdate,
         MessageType::Invalid => CxxMessage::Invalid,
-    }
-}
-
-pub fn set_message_cxx_type(message: &mut Message, message_type: CxxMessage) {
-    match message_type {
-        CxxMessage::FloatUpdate => message.message = MessageType::FloatUpdate(0.0),
-        CxxMessage::IntUpdate => message.message = MessageType::IntUpdate(0),
-        CxxMessage::BoolUpdate => message.message = MessageType::BoolUpdate(false),
-        CxxMessage::GestureUpdate => message.message = MessageType::GestureUpdate(false),
-        CxxMessage::Invalid => message.message = MessageType::Invalid,
-        _ => panic!("Unspported MessageType here!") // In reality this shouldn't happen since the
-        // enums are pretty type safe however there's nothing really stopping someone doing
-        // something dumb here...
     }
 }
