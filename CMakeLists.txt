@@ -1,11 +1,14 @@
 # sami CMakeLists.txt
-
 cmake_minimum_required(VERSION 3.9)
+
+project(sami VERSION 0.0.1)
+
+# Latest C++ standard
+set(CMAKE_CXX_STANDARD 23)
 
 # Building our rust messaging library
 set (SAMI_MESSAGE_CARGO_MANIFEST ${CMAKE_SOURCE_DIR}/sami/GUI/sami_message_parser/Cargo.toml)
 set(SAMI_MESSAGE_CARGO_TARGET_DIRECTORY ${CMAKE_SOURCE_DIR}/sami/GUI/sami_message_parser/target)
-set(SAMI_MESSAGE_SOURCE_FILE ${CMAKE_SOURCE_DIR}/sami/GUI/sami_message_parser/src/lib.rs)
 
 # Store the generated CPP files as variables for linkage
 set(SAMI_MESSAGE_BRIDGE_CPP ${SAMI_MESSAGE_CARGO_TARGET_DIRECTORY}/cxxbridge/sami_message_parser/src/lib.rs.cc)
@@ -26,10 +29,6 @@ corrosion_import_crate(MANIFEST_PATH ${SAMI_MESSAGE_CARGO_MANIFEST})
 # This is for neovim :)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-project(sami VERSION 0.0.1)
-
-# Latest C++ standard
-set(CMAKE_CXX_STANDARD 23)
 
 # We add our submodules here. We don't need to add choc as it's header only :)
 add_subdirectory(JUCE)                    
