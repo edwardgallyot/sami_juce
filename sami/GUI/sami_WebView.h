@@ -6,22 +6,15 @@
 
 namespace sami
 {
-class WebView : public choc::ui::WebView
+struct WebView : public choc::ui::WebView
 {
-public:
     WebView(bool enableDevTools);
     ~WebView();
-
     struct Listener
     {
-        Listener(const std::string& id);
-        virtual void OnWebViewInvocation(const std::string& msg) = 0;
-        std::string& id;
+        virtual void on_webview_message(const std::string& msg) = 0;
     };
-
     void handleWebviewInvocation(const std::string &) override;
-private:
     std::vector<Listener*> listener;
-    
 };
 }

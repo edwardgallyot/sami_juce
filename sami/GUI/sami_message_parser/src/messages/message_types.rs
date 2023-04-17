@@ -15,8 +15,8 @@ pub enum MessageType {
     IntUpdate(i32),
     BoolUpdate(bool),
     GestureUpdate(bool),
+
     // Custom Types
-    Invalid
 }
 
 pub fn get_message_cxx_type(message: &Message) -> CxxMessage {
@@ -24,10 +24,10 @@ pub fn get_message_cxx_type(message: &Message) -> CxxMessage {
     // this function will give us a build warning!
     // This is exactly what we want, we don't want this to be failing at runtime...
     match message.message {
-        MessageType::FloatUpdate(..) => CxxMessage::FloatUpdate,
-        MessageType::IntUpdate(..) => CxxMessage::IntUpdate,
-        MessageType::BoolUpdate(..) => CxxMessage::BoolUpdate,
-        MessageType::GestureUpdate(..) => CxxMessage::GestureUpdate,
-        MessageType::Invalid => CxxMessage::Invalid,
+        Some(MessageType::FloatUpdate(..)) => CxxMessage::FloatUpdate,
+        Some(MessageType::IntUpdate(..)) => CxxMessage::IntUpdate,
+        Some(MessageType::BoolUpdate(..)) => CxxMessage::BoolUpdate,
+        Some(MessageType::GestureUpdate(..)) => CxxMessage::GestureUpdate,
+        None => CxxMessage::Invalid
     }
 }

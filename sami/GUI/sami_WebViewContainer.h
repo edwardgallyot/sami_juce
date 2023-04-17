@@ -13,17 +13,14 @@
  using NativeUIBase = juce::NSViewComponent;
 #elif JUCE_WINDOWS
  using NativeUIBase = juce::HWNDComponent;
-#else
- using NativeUIBase = juce::XEmbedComponent;
 #endif
 
 
 namespace sami
 {
 // Deals with the cross-`platform webview things, should be owned by a webview component
-class WebViewContainer 
+struct WebViewContainer 
 {
-public:
     WebViewContainer(bool enableDevTools);
     ~WebViewContainer();
 
@@ -31,15 +28,7 @@ public:
     void ResizeToComponent(juce::Component* component);
     // Adds the webview in this container to the component supplied.
     void AddWebViewToComponent(juce::Component* component);
-    // Sets the webview in this containers HTML
-    void SetHTML(const std::string& );
-    // Sets the webview in this containers URL
-    void SetURL(const std::string& );
 
-private:
-    #if JUCE_LINUX
-    static unsigned long getWindowID (PatchWebView& v);
-    #endif
     std::unique_ptr<sami::WebView> webview;
     std::unique_ptr<NativeUIBase> nativeBase;
 };

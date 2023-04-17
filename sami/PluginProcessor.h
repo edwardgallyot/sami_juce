@@ -1,29 +1,38 @@
 #pragma once
 
+#include "DSP/sami_webview_adapter_distributor.hpp"
+#include "GUI/sami_message_parser/target/cxxbridge/sami_message_parser/src/lib.rs.h"
 #include "juce_audio_processors/juce_audio_processors.h"
+#include <unordered_map>
 
-//==============================================================================
-class AudioPluginAudioProcessor  : public juce::AudioProcessor
+namespace sami {
+struct AudioProcessor  : public juce::AudioProcessor,
+                         public juce::AudioProcessorValueTreeState::Listener                    
 {
-public:
-    //==============================================================================
-    AudioPluginAudioProcessor();
-    ~AudioPluginAudioProcessor() override;
+    AudioProcessor();
+    ~AudioProcessor() override;
 
-    //==============================================================================
+    adapters::webview_distributer webview_distributer;
+
+    juce::AudioProcessorValueTreeState parameters;
+    void parameterChanged(const juce::String& parameterID, float newValue) override;
+
+    // Underneath is JUCE boiler plate code that is seperated away from the functional style
+    // of sami. We want to keep this seperate to avoid too many OOP additions.
+
+    // JUCE BOILER PLATE
+    // ==================================================
+private:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
     bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
 
     void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
-    using AudioProcessor::processBlock;
 
-    //==============================================================================
     juce::AudioProcessorEditor* createEditor() override;
     bool hasEditor() const override;
 
-    //==============================================================================
     const juce::String getName() const override;
 
     bool acceptsMidi() const override;
@@ -31,18 +40,16 @@ public:
     bool isMidiEffect() const override;
     double getTailLengthSeconds() const override;
 
-    //==============================================================================
     int getNumPrograms() override;
     int getCurrentProgram() override;
     void setCurrentProgram (int index) override;
     const juce::String getProgramName (int index) override;
     void changeProgramName (int index, const juce::String& newName) override;
 
-    //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-private:
-    //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioProcessor)
 };
+
+}

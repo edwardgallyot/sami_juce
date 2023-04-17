@@ -5,16 +5,10 @@
 
 namespace sami
 {
-    class WebViewComponent : public juce::Component
-    {
-    public:
-        WebViewComponent(bool enableDevTools);
-        void resized() override;
-
-        void SetHTML(const std::string& html);
-        void SetURL(const std::string& url);
-
-    private:
-        std::unique_ptr<WebViewContainer> webview;
-    };
+struct WebViewComponent : public juce::Component
+{
+    WebViewComponent(bool enableDevTools);
+    void resized() override;
+    std::unique_ptr<WebViewContainer> webview_container;
+};
 }

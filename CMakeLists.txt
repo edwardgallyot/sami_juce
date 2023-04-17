@@ -12,9 +12,6 @@ set(SAMI_MESSAGE_CARGO_TARGET_DIRECTORY ${CMAKE_SOURCE_DIR}/sami/GUI/sami_messag
 
 # Store the generated CPP files as variables for linkage
 set(SAMI_MESSAGE_BRIDGE_CPP ${SAMI_MESSAGE_CARGO_TARGET_DIRECTORY}/cxxbridge/sami_message_parser/src/lib.rs.cc)
-set(SAMI_MESSAGE_INCLUDE_DIR ${SAMI_MESSAGE_BRIDGE_CPP}/..)
-set(SAMI_MESSAGE_LIB ${SAMI_MESSAGE_CARGO_TARGET_DIRECTORY}/debug/${CMAKE_STATIC_LIBRARY_PREFIX}sami_message_parser${CMAKE_STATIC_LIBRARY_SUFFIX})
-
 include(FetchContent)
 
 FetchContent_Declare(
@@ -29,14 +26,11 @@ corrosion_import_crate(MANIFEST_PATH ${SAMI_MESSAGE_CARGO_MANIFEST})
 # This is for neovim :)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-
 # We add our submodules here. We don't need to add choc as it's header only :)
 add_subdirectory(JUCE)                    
-link_directories(./sami/GUI/sami_message_parser/target/debug/)
 
 # We may target pro tools here...but no point for now
 # juce_set_aax_sdk_path(...)
-
 juce_add_plugin(sami
     # VERSION ...                               # Set this if the plugin version is different to the project version
     # ICON_BIG ...                              # ICON_* arguments specify a path to an image file to use as an icon for the Standalone
@@ -65,6 +59,11 @@ target_sources(sami
         sami/GUI/sami_WebViewContainer.cpp
         sami/GUI/sami_WebViewComponent.cpp
         sami/GUI/sami_WebView.cpp
+
+        # sami param adapters
+        sami/DSP/sami_webview_adapter.cpp
+        sami/DSP/sami_webview_adapter_distributor.cpp
+        sami/DSP/sami_params.cpp
 
         ${SAMI_MESSAGE_BRIDGE_CPP}
 )

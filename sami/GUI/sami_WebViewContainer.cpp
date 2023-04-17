@@ -18,16 +18,6 @@ sami::WebViewContainer::WebViewContainer(bool enableDevTools)
     this->nativeBase->setHWND (this->webview->getViewHandle());
     #endif
 }
-#if JUCE_LINUX
-static unsigned long sami::WebViewContainer::getWindowID (chod::ui::WebView& v);
-{
-    auto childWidget = GTK_WIDGET (v.getViewHandle());
-    auto plug = gtk_plug_new (0);
-    gtk_container_add (GTK_CONTAINER (plug), childWidget);
-    gtk_widget_show_all (plug);
-    return gtk_plug_get_id (GTK_PLUG (plug));
-}
-#endif
 
 sami::WebViewContainer::~WebViewContainer()
 {
@@ -55,14 +45,4 @@ void sami::WebViewContainer::ResizeToComponent(juce::Component* component)
 void sami::WebViewContainer::AddWebViewToComponent(juce::Component* component)
 {
     component->addAndMakeVisible(*this->nativeBase);
-}
-
-void sami::WebViewContainer::SetHTML(const std::string& html)
-{
-    this->webview->setHTML(html);
-}
-
-void sami::WebViewContainer::SetURL(const std::string& url)
-{
-    this->webview->navigate(url);
 }
