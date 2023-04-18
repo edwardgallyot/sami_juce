@@ -1,8 +1,23 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import { Message } from './bindings/Message';
+import { Target } from './bindings/Target'
+import { MessageType } from './bindings/MessageType';
 
 function App() {
+    const gainHandler = (msg: Message) => {
+        const update: MessageType = msg.message as {FloatUpdate: number;};
+        console.log(update);
+        if (typeof(update) != "undefined") {
+            setValue(update.FloatUpdate);
+        }
+    };
+    
+    useEffect(() => {
+        const x: Target = "Gain";
+        (window as any).onPluginMessage.subscribe(x, gainHandler )
+    }, []);
+    
     const [value, setValue] = useState(50);
 
     const handleValueChange = (event: any) => {

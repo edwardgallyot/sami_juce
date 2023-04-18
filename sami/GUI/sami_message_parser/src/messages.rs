@@ -21,7 +21,7 @@ pub struct Message {
 
 // A helper func to create the JS command we need from a stringified bit of rust JSON
 pub fn create_js_command_from_string(command: &String) -> String {
-    String::from("window.onPluginMessage.handle(".to_owned() + command + ");")
+    String::from("window.onPluginMessage.handle(JSON.parse('".to_owned() + command + "'));")
 }
 
 // We can get the message from the JSON string sent from the webview.

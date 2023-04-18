@@ -13,7 +13,9 @@ onPluginMessage.prototype = {
 
     handle: function (msg) {
         const handler = this.handlers.get(msg.target);
-        handler(msg);
+        if (typeof(handler) != "undefined") {
+            handler(msg);
+        }
     }
 }
 

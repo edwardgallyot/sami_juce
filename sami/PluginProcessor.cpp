@@ -45,21 +45,6 @@ sami::AudioProcessor::~AudioProcessor()
 {
 }
 
-void sami::AudioProcessor::parameterChanged(const juce::String& parameterID, float /* newValue */) {
-    // Search our target map for our ID
-    auto result = sami::params::param_id_to_target.find(parameterID);
-    // If we've got a target
-    if (result != sami::params::param_id_to_target.end()) {
-        // Search the distributor
-        auto dist = webview_distributer.target_to_adapter.find(result->second);
-        // If the distributor is ready
-        if (dist != webview_distributer.target_to_adapter.end()) {
-            // Set out atomic flag in the adapter
-            dist->second->should_send_message.store(true);
-        }
-    }
-
-}
 
 //==============================================================================
 // JUCE BOILER PLATE!

@@ -2,26 +2,22 @@
 
 #include "PluginProcessor.h"
 #include "GUI/sami_WebViewComponent.h"
-#include "DSP/sami_webview_adapter.hpp"
+#include "GUI/sami_webview_adapter.hpp"
 
 
 namespace sami {
-struct Editor  : public juce::AudioProcessorEditor,
-                 WebView::Listener
+struct Editor  : public juce::AudioProcessorEditor
 {
-public:
     explicit Editor (AudioProcessor&);
     ~Editor() override;
-
-    void paint (juce::Graphics&) override;
-    void resized() override;
-    void on_webview_message(const std::string &msg) override;
-
+private:
     AudioProcessor& p;
     sami::WebViewComponent web;
-
-    std::unique_ptr<sami::adapters::webview_adapter> gain_adapter;
-
+    sami::adapters::webview_adapter gain_adapter;
+    sami::adapters::webview_adapter sustain_adapter;
+    juce::CriticalSection listenerLock;
+    void paint (juce::Graphics&) override;
+    void resized() override;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Editor)
 };
 

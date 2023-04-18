@@ -61,8 +61,7 @@ target_sources(sami
         sami/GUI/sami_WebView.cpp
 
         # sami param adapters
-        sami/DSP/sami_webview_adapter.cpp
-        sami/DSP/sami_webview_adapter_distributor.cpp
+        sami/GUI/sami_webview_adapter.cpp
         sami/DSP/sami_params.cpp
 
         ${SAMI_MESSAGE_BRIDGE_CPP}

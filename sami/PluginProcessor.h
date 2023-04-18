@@ -1,21 +1,16 @@
 #pragma once
 
-#include "DSP/sami_webview_adapter_distributor.hpp"
 #include "GUI/sami_message_parser/target/cxxbridge/sami_message_parser/src/lib.rs.h"
 #include "juce_audio_processors/juce_audio_processors.h"
 #include <unordered_map>
 
 namespace sami {
-struct AudioProcessor  : public juce::AudioProcessor,
-                         public juce::AudioProcessorValueTreeState::Listener                    
+struct AudioProcessor  : public juce::AudioProcessor
 {
     AudioProcessor();
     ~AudioProcessor() override;
 
-    adapters::webview_distributer webview_distributer;
-
     juce::AudioProcessorValueTreeState parameters;
-    void parameterChanged(const juce::String& parameterID, float newValue) override;
 
     // Underneath is JUCE boiler plate code that is seperated away from the functional style
     // of sami. We want to keep this seperate to avoid too many OOP additions.

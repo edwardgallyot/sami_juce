@@ -15,6 +15,6 @@ struct WebView : public choc::ui::WebView
         virtual void on_webview_message(const std::string& msg) = 0;
     };
     void handleWebviewInvocation(const std::string &) override;
-    std::vector<Listener*> listener;
+    std::vector<Listener*> listeners;
 };
 }
