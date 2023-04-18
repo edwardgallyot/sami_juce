@@ -1,3 +1,4 @@
+#include "GUI/sami_callbacks.hpp"
 #include "GUI/sami_webview_adapter.hpp"
 #include "GUI/sami_message_parser/target/cxxbridge/sami_message_parser/src/lib.rs.h"
 #include "PluginProcessor.h"
@@ -11,6 +12,10 @@ sami::Editor::Editor (AudioProcessor& proc)
     p (proc),
     web(true),
     gain_adapter(
+        web,
+        proc,
+        messages::targets::cxx::gain,
+        params::gain
     )
 {
     // Set up the webview component editor and add the webview component
@@ -20,48 +25,39 @@ sami::Editor::Editor (AudioProcessor& proc)
     this->addAndMakeVisible(web);
     this->web.webview_container->webview->navigate("http://localhost:5173");
 
-    // Add the gain adapter
-    auto lock = juce::ScopedLock(this->listenerLock);
-    this->p.parameters.addParameterListener(sami::params::gain, &this->gain_adapter);
-    this->web.listeners.insert({sami::messages::targets::cxx::gain, &this->gain_adapter});
+    // Webview Callbacks
+    {
+        using namespace sami::callbacks::webview;
+        register_callbacks_with_adapter(
+            this->gain_adapter,
+            maybe_send_float_update
+        );
+    }
 
-    auto gain_rx = [&] (const Message& message) {
-            using namespace sami::messages;
-            float new_val = 0.0f;
-            if (updates::get_float(message, new_val)) {
-                std::cout << new_val << std::endl;
-                auto* param = this->p.parameters.getParameter(params::gain);
-                std::cout << param->getParameterID() << std::endl;
-                param->beginChangeGesture();
-                param->setValueNotifyingHost(param->convertTo0to1(new_val));
-                param->endChangeGesture();
-            }
-        };
-    auto gain_tx = [&] () {
-            using namespace sami::messages;
-
-            // Create our message and set a target
-            auto message = create();
-            targets::set(*message, targets::cxx::gain);
-
-            // Get our new_value
-            auto* param = p.parameters.getParameter(params::gain);
-            float new_val = param->convertFrom0to1(param->getValue());
-            updates::set_float(*message, new_val);
-
-            // Create our stringified payload
-            auto payload = std::string(to_js_command(to_json(*message)).c_str());
-            web.webview_container->webview->evaluateJavascript(payload);
-            destroy(message);
-        };
-
-    this->gain_adapter.processor_callback = gain_tx;
-    this->gain_adapter.webview_callback = gain_rx;
-    this->gain_adapter.startTimer(3);
+    // Processor Callbacks
+    {
+        using namespace sami::callbacks::processor;
+        register_callbacks_with_adapter(
+            this->gain_adapter, 
+            send_float_update
+        );
+    }
+    // Create connections to adapters
+    {
+        auto lock = juce::ScopedLock(this->listenerLock);
+        sami::adapters::register_adapters_with_listeners(
+            &this->gain_adapter
+        );
+    }
+    sami::adapters::start_adapter_timers(
+        4,
+        &this->gain_adapter
+    );
 }
 
 sami::Editor::~Editor()
 {
+    // TODO: provide a remove listener lock
     auto lock = juce::ScopedLock(this->listenerLock);
     this->p.parameters.removeParameterListener(sami::params::gain, &this->gain_adapter);
 }

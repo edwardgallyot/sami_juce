@@ -1,3 +1,4 @@
+#pragma once
 #include <JuceHeader.h>
 #include "../GUI/sami_message_parser/target/cxxbridge/sami_message_parser/src/lib.rs.h"
 

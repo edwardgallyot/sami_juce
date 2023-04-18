@@ -14,7 +14,6 @@ private:
     AudioProcessor& p;
     sami::WebViewComponent web;
     sami::adapters::webview_adapter gain_adapter;
-    sami::adapters::webview_adapter sustain_adapter;
     juce::CriticalSection listenerLock;
     void paint (juce::Graphics&) override;
     void resized() override;

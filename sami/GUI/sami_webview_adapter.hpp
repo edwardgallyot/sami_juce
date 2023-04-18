@@ -2,8 +2,10 @@
 #include <JuceHeader.h>
 #include <memory>
 #include <functional>
+#include <concepts>
 #include "../GUI/sami_message_parser/target/cxxbridge/sami_message_parser/src/lib.rs.h"
 #include "../GUI/sami_WebViewComponent.h"
+#include "../PluginProcessor.h"
 
 namespace sami {
 
@@ -25,8 +27,14 @@ struct webview_adapter : public juce::HighResolutionTimer,
                          public juce::AudioProcessorValueTreeState::Listener,
                          public WebViewComponent::Listener
 {
+public:
     // A default constructor so you can intialise callbacks later
-    webview_adapter();
+    webview_adapter(
+        WebViewComponent& web,
+        sami::AudioProcessor& p,
+        const messages::targets::cxx& web_target,
+        const juce::String& param_target
+    );
     // a callback that is triggered when an update is triggered by the webview
     //
     // N.B. this function could quite easily break the real-time safety of this class.
@@ -38,6 +46,12 @@ struct webview_adapter : public juce::HighResolutionTimer,
     // N.B. this function could quite easily break the real-time safety of this class.
     // You've been warned...
     std::function<void()> processor_callback;
+
+    // Hold some public refs to concrete types
+    WebViewComponent& web;
+    sami::AudioProcessor& p;
+    const messages::targets::cxx& web_target;
+    const juce::String& param_target;
 private:
     // Interfaces
     // webview listener
@@ -54,11 +68,32 @@ private:
     std::atomic<bool> should_send_message;
 };
 
-std::unique_ptr<webview_adapter> create_webview_adapter(
-    std::function<void(const Message&)> on_webview_message,
-    std::function<void()> on_plugin_message
-);
-    
+// Register the adapters with it's listeners
+const auto register_adapters_with_listeners = [](std::same_as<webview_adapter*> auto... adapters) {
+    for (auto& adapter : {adapters...}) {
+        adapter->p.parameters.addParameterListener(adapter->param_target, adapter);
+        adapter->web.listeners.insert({adapter->web_target, adapter});
+    }
+};
+
+const auto remove_adapters_as_parameter_listeners = [](std::same_as<webview_adapter*> auto... adapters) {
+    for (auto& adapter : {adapters...}) {
+        adapter->p.parameters.removeParameterListener(adapter->param_target, adapter);
+    }
+};
+
+const auto start_adapter_timers = [](int ms, std::same_as<webview_adapter*> auto... adapters) {
+    for (auto& adapter : {adapters...}) {
+        adapter->startTimer(ms);
+    }
+};
+
+const auto stop_adapter_timers = [](std::same_as<webview_adapter*> auto... adapters) {
+    for (auto& adapter : {adapters...}) {
+        adapter->stopTimer();
+    }
+};
+
 }
 }
 
