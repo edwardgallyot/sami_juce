@@ -10,7 +10,6 @@ export const usePluginInit = () => {
             target: null,
             message: init,
         };
-        console.log(message);
         (window as any).external.invoke(JSON.stringify(message));
     };
 

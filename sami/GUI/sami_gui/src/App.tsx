@@ -15,8 +15,7 @@ function App() {
                   max={1}
                   step={0.01}
                   value={value}
-                  className={"slider"}
-                  onChange={handleValueChange}
+                  onChange={(e) => {handleValueChange(Number(e.target.value))}}
               />
           </div>
       </div>
