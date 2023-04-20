@@ -31,3 +31,7 @@ void sami::adapters::webview_adapter::on_webview_message(Message& message) {
     this->webview_callback(message);
 }
 
+void sami::adapters::webview_adapter::on_webview_init() {
+    this->should_send_message.store(true);
+}
+

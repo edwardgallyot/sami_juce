@@ -60,7 +60,6 @@ namespace processor {
 
 const auto send_float_update = [] (
     const sami::WebViewComponent& web,
-    const messages::targets::cxx& target, 
     const sami::AudioProcessor& processor,
     const juce::String& paramID
 ) {
@@ -68,9 +67,15 @@ const auto send_float_update = [] (
     
     // Create our message and set a target
     auto message = create();
-    targets::set(*message, target);
+
+    // Find our target setter from the rust lib and set the target if it exists
+    auto found = params::param_id_to_target_setter.find(paramID);
+    if (found != params::param_id_to_target_setter.end())
+    {
+        found->second(*message);
+    }
     
-    // Get our new_value
+    // Get our new_value and set the message type
     auto* param = processor.parameters.getParameter(paramID);
     float new_val = param->convertFrom0to1(param->getValue());
     updates::set_float(*message, new_val);
@@ -84,13 +89,12 @@ const auto send_float_update = [] (
 
 namespace {
 const auto process_messages = [](
-    std::tuple<const sami::WebViewComponent&, const messages::targets::cxx&, const sami::AudioProcessor&, const juce::String&> data,
-    const std::invocable<const sami::WebViewComponent&, const messages::targets::cxx&, const sami::AudioProcessor&, const juce::String&> auto& ...callbacks
+    std::tuple<const sami::WebViewComponent&, const sami::AudioProcessor&, const juce::String&> data,
+    const std::invocable<const sami::WebViewComponent&, const sami::AudioProcessor&, const juce::String&> auto& ...callbacks
     ) {
     for (const auto& callback : {callbacks...}) {
         callback(
             std::get<const WebViewComponent&>(data),
-            std::get<const messages::targets::cxx&>(data),
             std::get<const sami::AudioProcessor&>(data),
             std::get<const juce::String&>(data) 
         );
@@ -99,11 +103,11 @@ const auto process_messages = [](
 } 
 
 const auto register_callbacks_with_adapter = [] (sami::adapters::webview_adapter& adapter,
-    const std::invocable<const sami::WebViewComponent&, const messages::targets::cxx&, const sami::AudioProcessor&, const juce::String&> auto& ...callbacks
+    const std::invocable<const sami::WebViewComponent&, const sami::AudioProcessor&, const juce::String&> auto& ...callbacks
     ){
     adapter.processor_callback = [&] {
         process_messages(
-            {adapter.web, adapter.web_target, adapter.p, adapter.param_target},
+            {adapter.web, adapter.p, adapter.param_target},
             callbacks...
         );
     };

@@ -56,6 +56,7 @@ private:
     // Interfaces
     // webview listener
     void on_webview_message(Message & message) override;
+    void on_webview_init() override;
     // parameter listener
     void parameterChanged(const juce::String &/* parameterID */, float /* newValue */) override;
     // handles an async update from the timer thread

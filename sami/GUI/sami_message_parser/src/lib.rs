@@ -5,9 +5,11 @@ mod messages;
 
 use messages::message_types::get_message_cxx_type;
 
-use messages::targets::{
-    set_message_cxx_target,
-    get_message_cxx_target,
+use messages::targets::get_message_cxx_target;
+
+use messages::targets::setters::{
+    set_gain,
+    set_sustain,
 };
 
 use messages::{
@@ -22,6 +24,11 @@ use messages::{
 use messages::updates::{
     get_float_update,
     set_float_update,
+    get_int_update,
+    set_int_update,
+    get_bool_update,
+    set_bool_update,
+    get_gesture_update,
 };
 
 use messages::inits::get_init_script;
@@ -68,6 +75,8 @@ mod sami {
     #[namespace="sami::messages::message_types"]
     #[cxx_name="cxx"]
     pub(crate) enum CxxMessage {
+        #[cxx_name="init"]
+        Init,
         #[cxx_name="float_update"]
         FloatUpdate,
         #[cxx_name="int_update"]
@@ -96,16 +105,15 @@ mod sami {
     // In C++ these are enumerated.
     // However they are both generated from the same rust Enum making the types consistent
     // in both languages.
-    #[repr(i32)]
     #[namespace="sami::messages::targets"]
     #[cxx_name="cxx"]
     enum CxxTarget {
+        #[cxx_name="invalid"]
+        Invalid,
         #[cxx_name="gain"]
         Gain,
         #[cxx_name="sustain"]
         Sustain,
-        #[cxx_name="invalid"]
-        Invalid,
     }
 
     extern "Rust" {
@@ -114,8 +122,10 @@ mod sami {
         fn get_message_cxx_target(message: &Message) -> CxxTarget;
 
         #[namespace="sami::messages::targets"]
-        #[cxx_name="set"]
-        fn set_message_cxx_target(message: &mut Message, target: CxxTarget);
+        fn set_gain(message: &mut Message);
+
+        #[namespace="sami::messages::targets"]
+        fn set_sustain(message: &mut Message);
     }
 
     // INITS
@@ -134,6 +144,23 @@ mod sami {
         #[namespace="sami::messages::updates"]
         #[cxx_name="get_float"]
         fn get_float_update(message: &Message, value: &mut f32) -> bool;
+
+        #[cxx_name="set_int"]
+        fn set_int_update(message: &mut Message, value: i32);
+        #[namespace="sami::messages::updates"]
+        #[cxx_name="get_int"]
+        fn get_int_update(message: &Message, value: &mut i32) -> bool;
+
+        #[namespace="sami::messages::updates"]
+        #[cxx_name="set_bool"]
+        fn set_bool_update(message: &mut Message, value: bool);
+        #[namespace="sami::messages::updates"]
+        #[cxx_name="get_bool"]
+        fn get_bool_update(message: &Message, value: &mut bool) -> bool;
+
+        #[namespace="sami::messages::updates"]
+        #[cxx_name="get_gesture"]
+        fn get_gesture_update(message: &Message, value: &mut bool) -> bool;
     }
 }
 

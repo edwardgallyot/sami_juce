@@ -10,6 +10,7 @@ struct WebViewComponent : public juce::Component,
                           WebView::Listener {
     struct Listener {
         virtual void on_webview_message(Message&) = 0;
+        virtual void on_webview_init() = 0;
     };
     WebViewComponent(bool enableDevTools);
     std::unique_ptr<WebViewContainer> webview_container;

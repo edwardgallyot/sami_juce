@@ -50,7 +50,7 @@ sami::Editor::Editor (AudioProcessor& proc)
         );
     }
     sami::adapters::start_adapter_timers(
-        4,
+        5,
         &this->gain_adapter
     );
 }
@@ -59,7 +59,12 @@ sami::Editor::~Editor()
 {
     // TODO: provide a remove listener lock
     auto lock = juce::ScopedLock(this->listenerLock);
-    this->p.parameters.removeParameterListener(sami::params::gain, &this->gain_adapter);
+    adapters::remove_adapters_as_parameter_listeners(
+        &this->gain_adapter
+    );
+    adapters::stop_adapter_timers(
+        &this->gain_adapter
+    );
 }
 
     

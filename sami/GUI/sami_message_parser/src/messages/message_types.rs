@@ -10,6 +10,7 @@ use crate::{
 #[ts(export)]
 pub enum MessageType {
     // Inits
+    Init,
     // Updates
     FloatUpdate(f32),
     IntUpdate(i32),
@@ -24,6 +25,7 @@ pub fn get_message_cxx_type(message: &Message) -> CxxMessage {
     // this function will give us a build warning!
     // This is exactly what we want, we don't want this to be failing at runtime...
     match message.message {
+        Some(MessageType::Init) => CxxMessage::Init,
         Some(MessageType::FloatUpdate(..)) => CxxMessage::FloatUpdate,
         Some(MessageType::IntUpdate(..)) => CxxMessage::IntUpdate,
         Some(MessageType::BoolUpdate(..)) => CxxMessage::BoolUpdate,
