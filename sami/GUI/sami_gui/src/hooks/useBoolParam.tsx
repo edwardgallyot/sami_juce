@@ -1,23 +1,25 @@
-import { Message } from '../bindings/Message';
-import { Target } from '../bindings/Target'
+import { Target } from "../bindings/Target";
 import { MessageType } from '../bindings/MessageType';
+import { Message } from '../bindings/Message';
 import { useState, useEffect } from 'react';
 
-export const useFloatParam = (target: Target) => {
-    const [value, setValue] = useState(0);
+
+export const useBoolParam = (target: Target) => {
+
+    const [value, setValue] = useState(false);
 
     const pluginHandler = (msg: Message) => {
-        const update: MessageType = msg.message as {FloatUpdate: number;};
+        const update: MessageType = msg.message as {BoolUpdate: boolean;};
         if (typeof(update) != "undefined") {
-            setValue(update.FloatUpdate);
+            setValue(update.BoolUpdate);
         }
     };
 
-    const handleValueEvent = (value: number) => {
+    const handleValueEvent = (value: boolean) => {
         const message: Message = {
             target: target,
             message: {
-                FloatUpdate: value
+                BoolUpdate: value
             }
         };
         (window as any).external.invoke(JSON.stringify(message));
@@ -29,5 +31,6 @@ export const useFloatParam = (target: Target) => {
             (window as any).onPluginMessage.unsubscribe(target, pluginHandler);
         };
     }, []);
+
     return [value, handleValueEvent] as const;
-}
+};
