@@ -23,13 +23,14 @@ export const useFloatParam = (target: Target) => {
         (window as any).external.invoke(JSON.stringify(message));
     };
 
-    useCallback(handleValueEvent, [value]);
+    const valueSetter = useCallback((value: number) => {
+        handleValueEvent(value);
+    }, [value])
 
     useEffect(() => {
         (window as any).onPluginMessage.subscribe(target, pluginHandler);
-        return () => {
-            (window as any).onPluginMessage.unsubscribe(target, pluginHandler);
-        };
+        return () => { (window as any).onPluginMessage.unsubscribe(target, pluginHandler); };
     }, []);
-    return [value, setValue] as const;
+
+    return [value, valueSetter] as const;
 }

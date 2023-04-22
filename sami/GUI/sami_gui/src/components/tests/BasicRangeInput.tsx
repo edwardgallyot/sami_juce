@@ -6,6 +6,9 @@ import { useSetPerformingGesture } from '../../hooks/useGesture';
 export const BasicRangeInput = (props: RangeProps) =>  {
     const [value, setValue] = useFloatParam(props.target);
     const [setPerforimingGesture] = useSetPerformingGesture(props.target);
+    const handleChange = (e: any) => {
+        setValue(Number(e.target.value)); 
+    };
     return  (
         <div className='basicRangeInput'>
           <input
@@ -14,11 +17,11 @@ export const BasicRangeInput = (props: RangeProps) =>  {
               type={"range"}
               min={0}
               max={1}
-              step={0.01}
+              step={0.00001}
               value={value}
               onMouseDown={() => { setPerforimingGesture(true); }}
               onMouseUp={() => { setPerforimingGesture(false); }}
-              onChange={(e) => { setValue(Number(e.target.value)); }}
+              onChange={handleChange}
           />
        </div>
     );

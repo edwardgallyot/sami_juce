@@ -25,7 +25,7 @@ export const useBoolParam = (target: Target) => {
         (window as any).external.invoke(JSON.stringify(message));
     };
 
-    useCallback(handleValueEvent, [value]);
+    const valueSetter = useCallback(handleValueEvent, [value]);
 
     useEffect(() => {
         (window as any).onPluginMessage.subscribe(target, pluginHandler);
@@ -34,5 +34,5 @@ export const useBoolParam = (target: Target) => {
         };
     }, []);
 
-    return [value, setValue] as const;
+    return [value, valueSetter] as const;
 };
