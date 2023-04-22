@@ -1,0 +1,25 @@
+.mainContent {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    place-items: center;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+    position: fixed;
+    grid-gap: 20px;
+    text-align: center;
+}
+
+
+
+.basicRangeInput {
+    display: grid;
+    place-items: center;
+}
+
+.basicRangeInput .input {
+    display: inline-block;
+    line-height: normal;
+    vertical-align: middle;
+}

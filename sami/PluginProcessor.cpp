@@ -32,7 +32,7 @@ sami::AudioProcessor::AudioProcessor()
                 0.5f
             ),
             std::make_unique<juce::AudioParameterBool>(
-                "bypass",
+                sami::params::bypass,
                 "Bypass",
                 false
             ),

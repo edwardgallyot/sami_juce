@@ -10,17 +10,33 @@ function onPluginMessage(){
 
 onPluginMessage.prototype = {
     subscribe: function (target, handler)  {
-        this.handlers.set(target, handler);
+        // If we're the first one we need to create an empty array
+        if (!this.handlers.has(target)) {
+            this.handlers.set(target, []);
+        } 
+        let array = this.handlers.get(target);
+        array.push(handler);
     },
 
-    unsubscribe: function (target)  {
-        this.handlers.delete(target)
+    unsubscribe: function (target, handler)  {
+        if (this.handlers.has(target)) {
+            const handlers = this.handlers.get(target);
+            // Remove the handler from the map but don't delete the target
+            if (typeof(handlers) != "undefined") {
+                let index = handlers.indexOf(handler);
+                if (index > -1) {
+                    handlers.splice(index, 1);
+                }
+            }
+        }
     },
 
     handle: function (msg) {
-        const handler = this.handlers.get(msg.target);
-        if (typeof(handler) != "undefined") {
-            handler(msg);
+        const handlers = this.handlers.get(msg.target);
+        if (typeof(handlers) != "undefined") {
+            for (const handler of handlers) {
+                handler(msg);
+            }
         }
     }
 }

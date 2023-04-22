@@ -9,12 +9,14 @@ use strum_macros::EnumIter;
 pub enum Target{
     Gain,
     Sustain,
+    Bypass,
 }
 
 pub fn get_message_cxx_target(message: &Message) -> CxxTarget {
     match message.target {
         Some(Target::Gain) => CxxTarget::Gain,
         Some(Target::Sustain) => CxxTarget::Sustain,
+        Some(Target::Bypass) => CxxTarget::Bypass,
         None => CxxTarget::Invalid,
     }
 }

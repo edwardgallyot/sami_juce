@@ -10,6 +10,7 @@ use messages::targets::get_message_cxx_target;
 use messages::targets::setters::{
     set_gain,
     set_sustain,
+    set_bypass,
 };
 
 use messages::{
@@ -114,6 +115,8 @@ mod sami {
         Gain,
         #[cxx_name="sustain"]
         Sustain,
+        #[cxx_name="bypass"]
+        Bypass,
     }
 
     extern "Rust" {
@@ -126,6 +129,9 @@ mod sami {
 
         #[namespace="sami::messages::targets"]
         fn set_sustain(message: &mut Message);
+
+        #[namespace="sami::messages::targets"]
+        fn set_bypass(message: &mut Message);
     }
 
     // INITS
