@@ -1,10 +1,10 @@
 [package]
-name = "sami_message_parser"
+name = "sami_rs"
 version = "0.1.0"
 edition = "2021"
 
 [lib]
-name = "sami_message_parser"
+name = "sami_rs"
 crate-type = ["staticlib"]
 
 [dependencies]

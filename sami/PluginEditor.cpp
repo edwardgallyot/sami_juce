@@ -1,6 +1,6 @@
 #include "GUI/sami_callbacks.hpp"
 #include "GUI/sami_webview_adapter.hpp"
-#include "GUI/sami_message_parser/target/cxxbridge/sami_message_parser/src/lib.rs.h"
+#include "sami_rs/target/cxxbridge/sami_rs/src/lib.rs.h"
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "DSP/sami_params.hpp"

@@ -4,7 +4,7 @@
 #include <memory>
 #include <ostream>
 #include <ranges>
-#include "../GUI/sami_message_parser/target/cxxbridge/sami_message_parser/src/lib.rs.h"
+#include "../sami_rs/target/cxxbridge/sami_rs/src/lib.rs.h"
 
 sami::WebView::WebView(bool enableDevTools)
     : choc::ui::WebView({

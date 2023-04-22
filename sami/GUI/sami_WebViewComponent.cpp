@@ -1,5 +1,4 @@
 #include "sami_WebViewComponent.h"
-#include "sami_message_parser/target/cxxbridge/sami_message_parser/src/lib.rs.h"
 
 sami::WebViewComponent::WebViewComponent(bool enableDevTools)
 {

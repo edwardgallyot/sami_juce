@@ -7,11 +7,11 @@ project(sami VERSION 0.0.1)
 set(CMAKE_CXX_STANDARD 23)
 
 # Building our rust messaging library
-set (SAMI_MESSAGE_CARGO_MANIFEST ${CMAKE_SOURCE_DIR}/sami/GUI/sami_message_parser/Cargo.toml)
-set(SAMI_MESSAGE_CARGO_TARGET_DIRECTORY ${CMAKE_SOURCE_DIR}/sami/GUI/sami_message_parser/target)
+set (SAMI_RS_CARGO_MANIFEST ${CMAKE_SOURCE_DIR}/sami/sami_rs/Cargo.toml)
+set(SAMI_RS_CARGO_TARGET_DIRECTORY ${CMAKE_SOURCE_DIR}/sami/sami_rs/target)
 
 # Store the generated CPP files as variables for linkage
-set(SAMI_MESSAGE_BRIDGE_CPP ${SAMI_MESSAGE_CARGO_TARGET_DIRECTORY}/cxxbridge/sami_message_parser/src/lib.rs.cc)
+set(SAMI_RS_BRIDGE_CPP ${SAMI_RS_CARGO_TARGET_DIRECTORY}/cxxbridge/sami_rs/src/lib.rs.cc)
 include(FetchContent)
 
 FetchContent_Declare(
@@ -21,7 +21,7 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(Corrosion)
-corrosion_import_crate(MANIFEST_PATH ${SAMI_MESSAGE_CARGO_MANIFEST})
+corrosion_import_crate(MANIFEST_PATH ${SAMI_RS_CARGO_MANIFEST})
 
 # This is for neovim :)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -35,18 +35,18 @@ juce_add_plugin(sami
     # VERSION ...                               # Set this if the plugin version is different to the project version
     # ICON_BIG ...                              # ICON_* arguments specify a path to an image file to use as an icon for the Standalone
     # ICON_SMALL ...
-    # COMPANY_NAME ...                          # Specify the name of the plugin's author
-    IS_SYNTH TRUE                       # Is this a synth or an effect?
-    NEEDS_MIDI_INPUT TRUE               # Does the plugin need midi input?
+    COMPANY_NAME "Fortunati Plugins"            # Specify the name of the plugin's author
+    IS_SYNTH TRUE                               # Is this a synth or an effect?
+    NEEDS_MIDI_INPUT TRUE                       # Does the plugin need midi input?
     # NEEDS_MIDI_OUTPUT TRUE/FALSE              # Does the plugin need midi output?
     # IS_MIDI_EFFECT TRUE/FALSE                 # Is this plugin a MIDI effect?
     # EDITOR_WANTS_KEYBOARD_FOCUS TRUE/FALSE    # Does the editor need keyboard focus?
-    # COPY_PLUGIN_AFTER_BUILD TRUE/FALSE        # Should the plugin be installed to a default location after building?
-    PLUGIN_MANUFACTURER_CODE Juce               # A four-character manufacturer id with at least one upper-case character
-    PLUGIN_CODE Dem0                            # A unique four-character plugin id with exactly one upper-case character
+    COPY_PLUGIN_AFTER_BUILD TRUE                # Should the plugin be installed to a default location after building?
+    PLUGIN_MANUFACTURER_CODE FtPl               # A four-character manufacturer id with at least one upper-case character
+    PLUGIN_CODE Sami                            # A unique four-character plugin id with exactly one upper-case character
                                                 # GarageBand 10.3 requires the first letter to be upper-case, and the remaining letters to be lower-case
-    FORMATS AU VST3 Standalone                  # The formats to build. Other valid formats are: AAX Unity VST AU AUv3
-    PRODUCT_NAME "sami")        # The name of the final executable, which can differ from the target name
+    FORMATS AU VST3                             # The formats to build. Other valid formats are: AAX Unity VST AU AUv3
+    PRODUCT_NAME "sami")                        # The name of the final executable, which can differ from the target name
 
 # Generate the JUCE header
 juce_generate_juce_header(sami) 
@@ -64,7 +64,7 @@ target_sources(sami
         sami/GUI/sami_webview_adapter.cpp
         sami/DSP/sami_params.cpp
 
-        ${SAMI_MESSAGE_BRIDGE_CPP}
+        ${SAMI_RS_BRIDGE_CPP}
 )
 
 
@@ -91,5 +91,5 @@ target_link_libraries(sami
         juce::juce_recommended_lto_flags
         juce::juce_recommended_warning_flags
 
-        sami_message_parser
+       sami_rs 
 )

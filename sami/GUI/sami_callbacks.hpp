@@ -1,7 +1,7 @@
 #pragma once
 #include "juce_core/system/juce_PlatformDefs.h"
 #include "sami_WebViewComponent.h"
-#include "sami_message_parser/target/cxxbridge/sami_message_parser/src/lib.rs.h"
+#include "../sami_rs/target/cxxbridge/sami_rs/src/lib.rs.h"
 #include "../DSP/sami_params.hpp"
 #include "sami_webview_adapter.hpp"
 #include <JuceHeader.h>

@@ -1,6 +1,14 @@
 use cxx;
 
 // Import module structure
+// =========================
+// SAMPLER
+mod sampler;
+
+use sampler::main;
+
+
+// MESSAGES
 mod messages;
 
 use messages::message_types::get_message_cxx_type;
@@ -34,11 +42,24 @@ use messages::updates::{
 
 use messages::inits::get_init_script;
 
-
 // This is where the generated code from build.rs will come from
-// this allows use to use rust code in C++ to interface with Typescript.
+// this allows use to use rust code in C++ to interface with Typescript
+// and call our sampler DSP code.
 #[cxx::bridge(namespace = "sami")]
 mod sami {
+
+    // =============================================
+    // SAMPLER INSTRUMENT
+    // =============================================
+    extern "Rust" {
+        #[namespace="sami::sampler"]
+        #[cxx_name="main_boi"]
+        fn main();
+    }
+
+    // =============================================
+    // MESSAGE PASSING USING SERDE JSON
+    // =============================================
     // MESSAGE NAMESPACE
     // Handles everything to do with serialising and deserialising a message from the
     // webview.

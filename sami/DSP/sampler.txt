@@ -1,0 +1,38 @@
+
+SAMI SAMPLER 
+=============
+
+// We want to embed the sami files into the executable so we can 
+// distribute the app as one thing without needing to do any file I/O.
+
+// We may well move to file I/O if this doesn't work tho...
+
+// Managing the large amount of data required for this project in C++
+// would be a nightmare so hopefully writing in rust will make things
+// easier and safer.
+
+// Luckily the sampler doesn't need audio input as it's a VSTi
+// so we can pretty much get away with asking for the next buffer
+// once we've initialised.
+                                                                               
+                     * GIVES BACK A BUFFER                                               
+                       WITH THE RIGHT SAMPLES
+                       AT THE RIGHT TIMES.
+                     * LOADS FILES INTO A DATA STRUCTURE
+                     * ALLOCATES ITS OWN PROCESS BUFFER
+                     * PROCESSES THE RAW MIDI DATA
+
+ ===========         ===========                     
+             <------                                                                 
+    JUCE               SAMPLER      
+             ------>                                                                  
+ ===========         ===========                     
+
+          * SENDS MIDI & TIMINGS.
+          * QUERIES THE LATEST RUST
+            BUFFER FOR THE RIGHT 
+            AUDIO.
+                                                                               
+                                                                               
+                                                                               
+                                                                               

@@ -3,7 +3,7 @@
 #include <memory>
 #include <functional>
 #include <concepts>
-#include "../GUI/sami_message_parser/target/cxxbridge/sami_message_parser/src/lib.rs.h"
+#include "../sami_rs/target/cxxbridge/sami_rs/src/lib.rs.h"
 #include "../GUI/sami_WebViewComponent.h"
 #include "../PluginProcessor.h"
 

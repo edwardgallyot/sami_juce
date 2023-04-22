@@ -8,7 +8,7 @@ export const useFloatParam = (target: Target) => {
 
     const pluginHandler = (msg: Message) => {
         const update: MessageType = msg.message as {FloatUpdate: number;};
-        if (typeof(update) != "undefined") {
+        if (update.FloatUpdate !== null) {
             setValue(update.FloatUpdate);
         }
     };

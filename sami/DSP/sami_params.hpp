@@ -1,7 +1,7 @@
 #pragma once
 #include <JuceHeader.h>
 #include <functional>
-#include "../GUI/sami_message_parser/target/cxxbridge/sami_message_parser/src/lib.rs.h"
+#include "../sami_rs/target/cxxbridge/sami_rs/src/lib.rs.h"
 
 namespace sami {
 namespace params {

@@ -2,7 +2,7 @@
 
 #include <JuceHeader.h>
 #include "sami_WebViewContainer.h"
-#include "sami_message_parser/target/cxxbridge/sami_message_parser/src/lib.rs.h"
+#include "../sami_rs/target/cxxbridge/sami_rs/src/lib.rs.h"
 
 namespace sami
 {

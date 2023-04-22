@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GUI/sami_message_parser/target/cxxbridge/sami_message_parser/src/lib.rs.h"
+#include "sami_rs/target/cxxbridge/sami_rs/src/lib.rs.h"
 #include "juce_audio_processors/juce_audio_processors.h"
 #include <unordered_map>
 
