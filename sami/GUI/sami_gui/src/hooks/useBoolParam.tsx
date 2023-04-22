@@ -1,7 +1,7 @@
 import { Target } from "../bindings/Target";
 import { MessageType } from '../bindings/MessageType';
 import { Message } from '../bindings/Message';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 
 export const useBoolParam = (target: Target) => {
@@ -25,6 +25,8 @@ export const useBoolParam = (target: Target) => {
         (window as any).external.invoke(JSON.stringify(message));
     };
 
+    useCallback(handleValueEvent, [value]);
+
     useEffect(() => {
         (window as any).onPluginMessage.subscribe(target, pluginHandler);
         return () => {
@@ -32,5 +34,5 @@ export const useBoolParam = (target: Target) => {
         };
     }, []);
 
-    return [value, handleValueEvent] as const;
+    return [value, setValue] as const;
 };
