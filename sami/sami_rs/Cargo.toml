@@ -14,6 +14,8 @@ ts-rs = "6.2.1"
 cxx = "1.0"
 strum = {version="0.24.1", features = ["strum_macros"]}
 strum_macros = "0.24.3"
+hound = "3.5.0"
+wmidi = "4.0.6"
 
 [build-dependencies]
 cxx-build = "1.0"

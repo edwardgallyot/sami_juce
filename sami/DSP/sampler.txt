@@ -32,7 +32,10 @@ SAMI SAMPLER
           * QUERIES THE LATEST RUST
             BUFFER FOR THE RIGHT 
             AUDIO.
-                                                                               
-                                                                               
-                                                                               
+
+MIDI MESSAGES
+==============
+
+Midi Messages are typically three bytes so we should just copy these into individual
+bytes for rust to deal with.
                                                                                
