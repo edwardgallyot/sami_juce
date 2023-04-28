@@ -9,7 +9,10 @@ export const Sami = () => {
     return (
       <section className="mainContent">
         <BasicRangeInput target='Gain'/>
+        <BasicRangeInput target='Attack'/>
+        <BasicRangeInput target='Decay'/>
         <BasicRangeInput target='Sustain'/>
+        <BasicRangeInput target='Release'/>
         <BasicSwitch target='Bypass'/>
       </section>
     )

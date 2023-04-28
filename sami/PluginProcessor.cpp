@@ -26,8 +26,26 @@ sami::AudioProcessor::AudioProcessor()
                 0.5f
             ),
             std::make_unique<juce::AudioParameterFloat>(
+                juce::ParameterID(sami::params::attack, 1),
+                "Attack",
+                juce::NormalisableRange<float>{0.0f, 1.0f},
+                0.5f
+            ),
+            std::make_unique<juce::AudioParameterFloat>(
+                juce::ParameterID(sami::params::decay, 1),
+                "Decay",
+                juce::NormalisableRange<float>{0.0f, 1.0f},
+                0.5f
+            ),
+            std::make_unique<juce::AudioParameterFloat>(
                 juce::ParameterID(sami::params::sustain, 1),
                 "Sustain",
+                juce::NormalisableRange<float>{0.0f, 1.0f},
+                0.5f
+            ),
+            std::make_unique<juce::AudioParameterFloat>(
+                juce::ParameterID(sami::params::release, 1),
+                "Release",
                 juce::NormalisableRange<float>{0.0f, 1.0f},
                 0.5f
             ),

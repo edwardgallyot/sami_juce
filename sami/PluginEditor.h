@@ -16,7 +16,10 @@ private:
     sami::adapters::webview_adapter bypass_adapter;
 
     sami::adapters::webview_adapter gain_adapter;
+    sami::adapters::webview_adapter attack_adapter;
+    sami::adapters::webview_adapter decay_adapter;
     sami::adapters::webview_adapter sustain_adapter;
+    sami::adapters::webview_adapter release_adapter;
 
     juce::CriticalSection listenerLock;
     void paint (juce::Graphics&) override;

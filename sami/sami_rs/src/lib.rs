@@ -17,7 +17,10 @@ use messages::targets::get_message_cxx_target;
 
 use messages::targets::setters::{
     set_gain,
+    set_attack,
+    set_decay,
     set_sustain,
+    set_release,
     set_bypass,
 };
 
@@ -134,8 +137,14 @@ mod sami {
         Invalid,
         #[cxx_name="gain"]
         Gain,
+        #[cxx_name="attack"]
+        Attack,
+        #[cxx_name="decay"]
+        Decay,
         #[cxx_name="sustain"]
         Sustain,
+        #[cxx_name="release"]
+        Release,
         #[cxx_name="bypass"]
         Bypass,
     }
@@ -149,7 +158,16 @@ mod sami {
         fn set_gain(message: &mut Message);
 
         #[namespace="sami::messages::targets"]
+        fn set_attack(message: &mut Message);
+
+        #[namespace="sami::messages::targets"]
+        fn set_decay(message: &mut Message);
+
+        #[namespace="sami::messages::targets"]
         fn set_sustain(message: &mut Message);
+
+        #[namespace="sami::messages::targets"]
+        fn set_release(message: &mut Message);
 
         #[namespace="sami::messages::targets"]
         fn set_bypass(message: &mut Message);
