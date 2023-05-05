@@ -1,8 +1,12 @@
 #pragma once
 
 #include "sami_rs/target/cxxbridge/sami_rs/src/lib.rs.h"
-#include "juce_audio_processors/juce_audio_processors.h"
+#include "JuceHeader.h"
 #include <unordered_map>
+#include "DSP/sami_params.hpp"
+#include <cstddef>
+#include <iostream>
+#include "sami_rs/target/cxxbridge/sami_rs/src/lib.rs.h"
 
 namespace sami {
 struct AudioProcessor  : public juce::AudioProcessor
@@ -20,7 +24,11 @@ struct AudioProcessor  : public juce::AudioProcessor
 private:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
+    
+    sampler::Sampler* sampler;
 
+
+    // ===================================
     bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
 
     void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;

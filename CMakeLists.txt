@@ -5,6 +5,9 @@ project(sami VERSION 0.0.1)
 
 # Latest C++ standard
 set(CMAKE_CXX_STANDARD 23)
+# Silence CXX bridge warniing
+set(SAMI_CXX_FLAGS "-Wno-dollar-in-identifier-extension")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SAMI_CXX_FLAGS}")
 
 # Building our rust messaging library
 set (SAMI_RS_CARGO_MANIFEST ${CMAKE_SOURCE_DIR}/sami/sami_rs/Cargo.toml)
@@ -74,7 +77,8 @@ target_compile_definitions(sami
         JUCE_WEB_BROWSER=0  # If you remove this, add `NEEDS_WEB_BROWSER TRUE` to the `juce_add_plugin` call
         JUCE_USE_CURL=0     # If you remove this, add `NEEDS_CURL TRUE` to the `juce_add_plugin` call
         JUCE_VST3_CAN_REPLACE_VST2=0
-        DONT_SET_USING_JUCE_NAMESPACE=1)
+        DONT_SET_USING_JUCE_NAMESPACE=1
+        )
 
 # We will end up adding our inlined assets as binary data from the html into juce
 # juce_add_binary_data(AudioPluginData SOURCES ...)

@@ -1,12 +1,16 @@
 use cxx;
-
 // Import module structure
 // =========================
 // SAMPLER
 mod sampler;
 
-use sampler::main;
-
+use sampler::{
+    process_midi, 
+    create,
+    destroy,
+    process_frame,
+    Sampler,
+};
 
 // MESSAGES
 mod messages;
@@ -50,14 +54,24 @@ use messages::inits::get_init_script;
 // and call our sampler DSP code.
 #[cxx::bridge(namespace = "sami")]
 mod sami {
-
     // =============================================
     // SAMPLER INSTRUMENT
     // =============================================
     extern "Rust" {
         #[namespace="sami::sampler"]
-        #[cxx_name="main_boi"]
-        fn main();
+        type Sampler<'a>;
+
+        #[namespace="sami::sampler"]
+        unsafe fn process_midi(sampler: &mut Sampler, data: *const u8, num_bytes: usize, sample_position: i32);
+
+        #[namespace="sami::sampler"]
+        pub unsafe fn create<'a>(fs: f64, block_size: usize) -> *mut Sampler<'a>;
+
+        #[namespace="sami::sampler"]
+        pub unsafe fn process_frame(sampler: &mut Sampler, audio_l: *mut f32, audio_r: *mut f32);
+
+        #[namespace="sami::sampler"]
+        pub unsafe fn destroy(sampler: *mut Sampler);
     }
 
     // =============================================
@@ -66,7 +80,6 @@ mod sami {
     // MESSAGE NAMESPACE
     // Handles everything to do with serialising and deserialising a message from the
     // webview.
-
     // All the functions that C++ need to work with message objects.
     extern "Rust" {
         // Define all the functions for a standard message in C++
@@ -186,12 +199,15 @@ mod sami {
         #[namespace="sami::messages::updates"]
         #[cxx_name="set_float"]
         fn set_float_update(message: &mut Message, value: f32);
+
         #[namespace="sami::messages::updates"]
         #[cxx_name="get_float"]
         fn get_float_update(message: &Message, value: &mut f32) -> bool;
 
+        #[namespace="sami::messages::updates"]
         #[cxx_name="set_int"]
         fn set_int_update(message: &mut Message, value: i32);
+
         #[namespace="sami::messages::updates"]
         #[cxx_name="get_int"]
         fn get_int_update(message: &Message, value: &mut i32) -> bool;
@@ -199,6 +215,7 @@ mod sami {
         #[namespace="sami::messages::updates"]
         #[cxx_name="set_bool"]
         fn set_bool_update(message: &mut Message, value: bool);
+
         #[namespace="sami::messages::updates"]
         #[cxx_name="get_bool"]
         fn get_bool_update(message: &Message, value: &mut bool) -> bool;
