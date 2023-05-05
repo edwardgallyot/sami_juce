@@ -59,13 +59,13 @@ mod sami {
     // =============================================
     extern "Rust" {
         #[namespace="sami::sampler"]
-        type Sampler<'a>;
+        type Sampler;
 
         #[namespace="sami::sampler"]
         unsafe fn process_midi(sampler: &mut Sampler, data: *const u8, num_bytes: usize, sample_position: i32);
 
         #[namespace="sami::sampler"]
-        pub unsafe fn create<'a>(fs: f64, block_size: usize) -> *mut Sampler<'a>;
+        pub fn create(fs: f64, block_size: usize) -> *mut Sampler;
 
         #[namespace="sami::sampler"]
         pub unsafe fn process_frame(sampler: &mut Sampler, audio_l: *mut f32, audio_r: *mut f32);

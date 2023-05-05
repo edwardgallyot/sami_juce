@@ -23,15 +23,15 @@ struct AudioProcessor  : public juce::AudioProcessor
     // ==================================================
 private:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
     void releaseResources() override;
     
-    sampler::Sampler* sampler;
+    std::unique_ptr<sampler::Sampler, std::function<void(sampler::Sampler*)>> sampler;
 
 
     // ===================================
     bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
 
-    void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
 
     juce::AudioProcessorEditor* createEditor() override;
     bool hasEditor() const override;

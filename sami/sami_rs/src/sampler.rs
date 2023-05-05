@@ -17,17 +17,17 @@ use self::sample::state::State;
 // TODO: Take into account sample rates from this level.
 // Sami's samples will be at 48,000 Hz so we should account for the fact that 
 // there could be other values of fs.
-pub struct Sampler<'a> {
-    samples: HashMap<Note, Sample<'a>>,
+pub struct Sampler {
+    samples: HashMap<Note, Sample>,
     fs: f64,
     block_size: usize,
     frame: i32,
 }
 
 // Here we get the implementation for sampler
-impl<'a> Sampler<'a> {
+impl Sampler {
 
-    fn new(x: fn() -> HashMap<Note, Sample<'a>>, fs: f64, block_size: usize) -> Sampler<'a> {
+    fn new(x: fn() -> HashMap<Note, Sample>, fs: f64, block_size: usize) -> Sampler {
         println!("num channels{}", block_size);
         Sampler {
             samples: x(),
@@ -50,8 +50,9 @@ impl<'a> Sampler<'a> {
         // Find out the state of our sample.
         for (_, sample) in &mut self.samples {
             if let State::On = sample.state {
-                out += sample.get_next().0;
-                out += sample.get_next().1;
+                let sample_out = sample.get_next();
+                out += sample_out.0;
+                out += sample_out.1;
             }
         }; 
 
@@ -85,7 +86,7 @@ impl<'a> Sampler<'a> {
 // These guys are things we need for the C++ library and are exposed in lib.rs.
 // They are unsafe so they can be called from within C++ but they mainly deref something
 // and move back into safe rust.
-pub unsafe fn create<'a>(fs: f64, block_size: usize) -> *mut Sampler<'a> {
+pub fn create(fs: f64, block_size: usize) -> *mut Sampler {
     Box::into_raw(
         Box::new(
             Sampler::new(

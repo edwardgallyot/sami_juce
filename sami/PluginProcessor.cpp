@@ -64,7 +64,10 @@ sami::AudioProcessor::~AudioProcessor()
 //==============================================================================
 void sami::AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    this->sampler = sami::sampler::create(sampleRate, static_cast<size_t>(samplesPerBlock));
+    this->sampler = std::unique_ptr<sami::sampler::Sampler, std::function<void(sampler::Sampler*)>>(
+        sami::sampler::create(sampleRate, static_cast<size_t>(samplesPerBlock)),
+        sami::sampler::destroy
+    );
 }
 
 void sami::AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,

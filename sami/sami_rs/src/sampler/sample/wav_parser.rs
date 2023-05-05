@@ -145,15 +145,23 @@ impl<'a> WavFile<'a> {
         println!("Num Frames: {}", self.bytes_per_sample);
     }
     
-    pub fn get_stereo_sample(&self, position: usize) -> Result<(f32, f32), Box<dyn error::Error>> {
+    pub fn get_stereo_samples(&self) -> Result<Vec<(f32, f32)>, Box<dyn error::Error>> {
         if self.num_channels != 2 {
             return Err("Not stereo File!!".to_string().into());
         }
-        let mut offset = position * self.bytes_per_sample;
-        offset += self.starting_byte;
-
-        let left: f32 = f32::from_le_bytes(self.bytes[offset..offset+self.bytes_per_sample].try_into()?);
-        let right: f32 = f32::from_le_bytes(self.bytes[offset..offset+self.bytes_per_sample].try_into()?);
-        Ok((left, right))
+        let samples: Vec<(f32, f32)> = (self.starting_byte..(self.bytes.len() - (self.bytes_per_sample * 2))).step_by(self.bytes_per_sample * 2)
+            .map(|x|{
+                let mut left = 0.0;
+                let mut right = 0.0;
+                if let Ok(bytes) = self.bytes[x..x+self.bytes_per_sample].try_into() {
+                    left = f32::from_le_bytes(bytes);
+                }
+                if let Ok(bytes) = self.bytes[x+self.bytes_per_sample..x+(self.bytes_per_sample*2)].try_into() {
+                    right = f32::from_le_bytes(bytes);
+                }
+                (left, right)
+            })
+            .collect();
+        Ok(samples)
     }
 }
